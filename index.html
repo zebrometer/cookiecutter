@@ -1,0 +1,38 @@
+
+
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Title of the document</title>
+
+		<script type="text/javascript" src="node_modules/xlsx/dist/xlsx.core.min.js"></script>
+		<script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
+		<script type="text/javascript" src="vendor/bin-packing-master/js/packer.js"></script>
+		<script type="text/javascript" src="vendor/jsPDF-1.2.60/dist/jspdf.min.js"></script>
+
+		<script type="text/javascript" src="js/index.js"></script>
+		<script type="text/javascript">$(document).ready(bootstrapApp)</script>
+		
+ 		<link rel="stylesheet" type="text/css" href="css/styles.css">		
+	</head>
+
+	<body>				
+		<div class="toolbar">			
+			<button class="reset">Reset</button>
+			<button class="export">Export PDFs</button>			
+		</div>
+
+		<div class="progress">
+			<div class="indicator animate">
+				<span></span>
+			</div>			
+		</div>
+		
+		<div class="dropTarget">
+			<span>Drop Order Excel File Here...</span>
+		</div>
+		<div class="container" style="width: 300px; height: 460px;" />		
+	</body>
+
+</html>
