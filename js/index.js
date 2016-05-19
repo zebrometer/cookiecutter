@@ -1,6 +1,25 @@
 // https://github.com/SheetJS/js-xlsx
 // https://github.com/jakesgordon/bin-packing
-function bootstrapApp() {	
+function bootstrapApp() {
+	if ( !getCookiecutterWidth() || !getCookiecutterHeight() ) {
+		setCookiecutterWidth(150)
+		setCookiecutterHeight(100)
+	}
+
+	function onSizeChange(value, isHeight) {
+		if (isHeight) {
+			setCookiecutterHeight(value)
+		} else {
+			setCookiecutterWidth(value)
+		}
+	}
+
+	$('.height-control').val(getCookiecutterHeight())
+	$('.width-control').val(getCookiecutterWidth())
+
+	$('.height-control').change(function(e) { onSizeChange($(this).val(), true)  })
+	$('.width-control').change(function(e)  { onSizeChange($(this).val(), false) })
+
 	$('.dropTarget').on('drop dragdrop', function(event) {
 		event.preventDefault()
 
@@ -17,3 +36,9 @@ function bootstrapApp() {
 
 	$('.dropTarget').on('dragover', function(event) { event.preventDefault() })
 }
+
+function getCookiecutterWidth()  { return +localStorage.getItem('cookiecutter_width')  }
+function getCookiecutterHeight() { return +localStorage.getItem('cookiecutter_height') }
+
+function setCookiecutterWidth(value)  { localStorage.setItem('cookiecutter_width', value)  }
+function setCookiecutterHeight(value) { localStorage.setItem('cookiecutter_height', value) }

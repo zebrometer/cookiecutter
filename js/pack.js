@@ -2,6 +2,8 @@
 var pack = (function() {
   function populateDocument(doc, blocks, documentWidth, documentHeight, x, y) {
     blocks.forEach(function(block, index) {
+      var hintMessage = block.o.width + ' x ' + block.o.height + '  Color: ' + block.o.color
+
       if (block.fit) {
         // Outer Frame
         doc.setFillColor(100, 100, 100)
@@ -23,7 +25,6 @@ var pack = (function() {
           'F')
 
         doc.setTextColor(255, 255, 255)
-        var hintMessage = block.o.width + ' x ' + block.o.height + '  Color: ' + block.o.color + " -- N:" + (index + 1)
         doc.text(x + block.fit.x + .3, y + block.fit.y + .3, hintMessage, 0)
 
         if (block.children) {
@@ -40,7 +41,7 @@ var pack = (function() {
         }
 
       } else {
-        console.log("No fit!")
+        console.log('%c' + hintMessage + ' did not fit', 'color: red; font-size: .8em')
       }
     })
   }
@@ -95,9 +96,9 @@ var pack = (function() {
     packR(orderedBlocks, processedBlocks)
 
     var topLevelBlocks = processedBlocks.filter(function(block) { return !block.parent })
+    var documentWidth  = getCookiecutterWidth()
+    var documentHeight = getCookiecutterHeight()
 
-    var documentWidth  = 90
-    var documentHeight = 90
     var packer = new Packer(documentWidth, documentHeight)
     packer.fit(topLevelBlocks)
 
