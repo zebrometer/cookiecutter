@@ -53,7 +53,15 @@ var parseFile = (function() {
   function processWorksheet(worksheet) {
     var range  = findRange(worksheet)
     var values = findValues(range, worksheet)
+
+    values && values.forEach(function(value) { value.uuid = guid() })    
+
     return values
+  }
+
+  function guid() {
+    function s4() { return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1) }
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4()
   }
 
   function findRange(worksheet) {
