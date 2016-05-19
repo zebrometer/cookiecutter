@@ -4,8 +4,8 @@
 var bootstrapApp =  ((function() {
 	var ALPHABET         = 'abcdefghijklmnopqrstuvwxyz'
 	var COLUMN_PROP_HASH = {
-		width         : letterAt(1),
-		height        : letterAt(0),
+		width         : letterAt(9),//letterAt(1),
+		height        : letterAt(8),//letterAt(0),
 		paddingTop    : letterAt(3),
 		paddingBottom : letterAt(4),
 		paddingLeft   : letterAt(5),
@@ -193,8 +193,8 @@ var bootstrapApp =  ((function() {
 
 		var orderedBlocks = blocks.slice()
 
-		var documentWidth  = 50
-		var documentHeight = 50
+		var documentWidth  = 90
+		var documentHeight = 90
 
 		var packer = new Packer(documentWidth, documentHeight)
  		packer.fit(orderedBlocks)
@@ -207,14 +207,27 @@ var bootstrapApp =  ((function() {
 
 		blocks.forEach(function(block, index) {
 			if (block.fit) {
-				var color = Math.floor(Math.random() * 150)
+				//var color = Math.floor(Math.random() * 150)
+				var color
 
+				// Outer Frame
+				color = 100
 				doc.setFillColor(color, color, color)
 				doc.rect(block.fit.x, block.fit.y, block.w, block.h, 'F')
 
+				// Inner Frame
+				color = 255
+				doc.setFillColor(color, color, color)
+				doc.rect(
+					block.fit.x + block.o.paddingLeft,
+					block.fit.y + block.o.paddingTop,
+					block.w - (block.o.paddingLeft + block.o.paddingRight),
+					block.h - (block.o.paddingTop  + block.o.paddingBottom),
+					'F')
+
 				doc.setTextColor(255, 255, 255)
 				var hintMessage = block.o.width + ' x ' + block.o.height + '  Color: ' + block.o.color + " -- N:" + (index + 1)
-				doc.text(block.fit.x + .1, block.fit.y + .3, hintMessage, 0)
+				doc.text(block.fit.x + .3, block.fit.y + .3, hintMessage, 0)
 			} else {
 				console.log("No fit!")
 			}
@@ -222,92 +235,92 @@ var bootstrapApp =  ((function() {
 		doc.save()
 	}
 
-	function nextDeferred(deferred) {
-		var nextDeferred = deferred.shift()
-		nextDeferred && nextDeferred(deferred)
-	}
+	// function nextDeferred(deferred) {
+	// 	var nextDeferred = deferred.shift()
+	// 	nextDeferred && nextDeferred(deferred)
+	// }
 
-	function addPdfFrame(deferred) {
-		var datum  = this.datum
-		var index  = this.index
-		var nSteps = this.nSteps
-
-		setTimeout(function() {
-			$('.container').append("<iframe class='preview-pane' type='application/pdf' style='width: 200%; height: 200%;' frameborder='0' src=" + generatePDF(datum) + "></iframe>")
-
-			var percentComplete = Math.floor(100 * index/ nSteps)
-
-			if (deferred.length === 0) {
-				$('.indicator').css('left', 0)
-				$('.indicator').css('width', 0)
-				$('.progress > .indicator > span').text('')
-			} else {
-				$('.indicator').css('left', '20px')
-				$('.indicator').css('width', percentComplete+'%')
-				$('.progress > .indicator > span').text(percentComplete+'%')
-			}
-
-			nextDeferred(deferred)
-		}, 500)
-	}
+	// function addPdfFrame(deferred) {
+	// 	var datum  = this.datum
+	// 	var index  = this.index
+	// 	var nSteps = this.nSteps
+	//
+	// 	setTimeout(function() {
+	// 		$('.container').append("<iframe class='preview-pane' type='application/pdf' style='width: 200%; height: 200%;' frameborder='0' src=" + generatePDF(datum) + "></iframe>")
+	//
+	// 		var percentComplete = Math.floor(100 * index/ nSteps)
+	//
+	// 		if (deferred.length === 0) {
+	// 			$('.indicator').css('left', 0)
+	// 			$('.indicator').css('width', 0)
+	// 			$('.progress > .indicator > span').text('')
+	// 		} else {
+	// 			$('.indicator').css('left', '20px')
+	// 			$('.indicator').css('width', percentComplete+'%')
+	// 			$('.progress > .indicator > span').text(percentComplete+'%')
+	// 		}
+	//
+	// 		nextDeferred(deferred)
+	// 	}, 500)
+	// }
 
 	/**
 	 * Units: 'pt', 'mm', 'cm', 'in', 'px', 'pc', 'em', 'ex'
 	 * http://mrrio.github.io/jsPDF/doc/symbols/jsPDF.html
 	 */
-	function generatePDF(datum) {
-		var swap  = datum.width > datum.height
+	// function generatePDF(datum) {
+	// 	var swap  = datum.width > datum.height
+	//
+	// 	var width         = swap ? datum.height        : datum.width
+	// 	var height        = swap ? datum.width         : datum.height
+	// 	var paddingLeft   = swap ? datum.paddingTop    : datum.paddingLeft
+	// 	var paddingRight  = swap ? datum.paddingBottom : datum.paddingRight
+	// 	var paddingTop    = swap ? datum.paddingLeft   : datum.paddingTop
+	// 	var paddingBottom = swap ? datum.paddingRight  : datum.paddingBottom
+	//
+	// 	var totalWidth    = paddingLeft + width  + paddingRight
+	// 	var totalHeight   = paddingTop  + height + paddingBottom
+	//
+	// 	var doc      = new jsPDF('p', 'in', [totalWidth, totalHeight])
+	// 	doc.tag_key  = datum.width
+	// 	doc.filename = clean(datum.width) + 'x' + clean(datum.height) + '_' + datum.color
+	//
+	//
+	// 	doc.setDrawColor(100, 100, 100)
+	// 	doc.setLineWidth(1/72)
+	// 	doc.rect(x + paddingLeft, y + paddingTop, width, height, 'S')
+	//
+	// 	var hintMessage = datum.width + ' x ' + datum.height + ' (' + totalWidth + ' x ' + totalHeight + ')   Color: ' + datum.color
+	// 	doc.text(.1, totalHeight - .1, hintMessage, 0)
+	//
+	// 	pdfs.push(doc)
+	// 	return doc.output('datauristring')
+	// }
 
-		var width         = swap ? datum.height        : datum.width
-		var height        = swap ? datum.width         : datum.height
-		var paddingLeft   = swap ? datum.paddingTop    : datum.paddingLeft
-		var paddingRight  = swap ? datum.paddingBottom : datum.paddingRight
-		var paddingTop    = swap ? datum.paddingLeft   : datum.paddingTop
-		var paddingBottom = swap ? datum.paddingRight  : datum.paddingBottom
-
-		var totalWidth    = paddingLeft + width  + paddingRight
-		var totalHeight   = paddingTop  + height + paddingBottom
-
-		var doc      = new jsPDF('p', 'in', [totalWidth, totalHeight])
-		doc.tag_key  = datum.width
-		doc.filename = clean(datum.width) + 'x' + clean(datum.height) + '_' + datum.color
-
-
-		doc.setDrawColor(100, 100, 100)
-		doc.setLineWidth(1/72)
-		doc.rect(x + paddingLeft, y + paddingTop, width, height, 'S')
-
-		var hintMessage = datum.width + ' x ' + datum.height + ' (' + totalWidth + ' x ' + totalHeight + ')   Color: ' + datum.color
-		doc.text(.1, totalHeight - .1, hintMessage, 0)
-
-		pdfs.push(doc)
-		return doc.output('datauristring')
-	}
-
-	function populatePDF(datum, x, y, doc) {
-		x = x || 0
-		y = y || 0
-
-		//var swap  = datum.width > datum.height
-		var swap  = false
-
-		var width         = swap ? datum.height        : datum.width
-		var height        = swap ? datum.width         : datum.height
-		var paddingLeft   = swap ? datum.paddingTop    : datum.paddingLeft
-		var paddingRight  = swap ? datum.paddingBottom : datum.paddingRight
-		var paddingTop    = swap ? datum.paddingLeft   : datum.paddingTop
-		var paddingBottom = swap ? datum.paddingRight  : datum.paddingBottom
-
-		var totalWidth    = paddingLeft + width  + paddingRight
-		var totalHeight   = paddingTop  + height + paddingBottom
-
-		doc.setDrawColor(100, 100, 100)
-		doc.setLineWidth(1/72)
-		doc.rect(x + paddingLeft, y + paddingTop, width, height, 'S')
-
-		var hintMessage = datum.width + ' x ' + datum.height + ' (' + totalWidth + ' x ' + totalHeight + ')   Color: ' + datum.color
-		doc.text(x + .1, y + totalHeight - .1, hintMessage, 0)
-	}
+	// function populatePDF(datum, x, y, doc) {
+	// 	x = x || 0
+	// 	y = y || 0
+	//
+	// 	//var swap  = datum.width > datum.height
+	// 	var swap  = false
+	//
+	// 	var width         = swap ? datum.height        : datum.width
+	// 	var height        = swap ? datum.width         : datum.height
+	// 	var paddingLeft   = swap ? datum.paddingTop    : datum.paddingLeft
+	// 	var paddingRight  = swap ? datum.paddingBottom : datum.paddingRight
+	// 	var paddingTop    = swap ? datum.paddingLeft   : datum.paddingTop
+	// 	var paddingBottom = swap ? datum.paddingRight  : datum.paddingBottom
+	//
+	// 	var totalWidth    = paddingLeft + width  + paddingRight
+	// 	var totalHeight   = paddingTop  + height + paddingBottom
+	//
+	// 	doc.setDrawColor(100, 100, 100)
+	// 	doc.setLineWidth(1/72)
+	// 	doc.rect(x + paddingLeft, y + paddingTop, width, height, 'S')
+	//
+	// 	var hintMessage = datum.width + ' x ' + datum.height + ' (' + totalWidth + ' x ' + totalHeight + ')   Color: ' + datum.color
+	// 	doc.text(x + .1, y + totalHeight - .1, hintMessage, 0)
+	// }
 
 	return function bootstrapApp() {
 		initEvent()
