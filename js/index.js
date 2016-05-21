@@ -27,7 +27,14 @@ function bootstrapApp() {
 			&& event.originalEvent.dataTransfer.files.length > 0
 			&& event.originalEvent.dataTransfer.files[0]
 
-		file && parseFile(file, function(values) { values && pack(values) })
+		file && parseFile(file, function(values) {
+			var dataurls = values && pack(values)
+
+			$('.container').empty()
+			dataurls && dataurls.forEach(function(dataurl) {
+				$('.container').append("<iframe class='preview-pane' type='application/pdf' style='width: 200%; height: 200%;' frameborder='0' src=" + dataurl + "></iframe>")
+			})
+		 })
 	})
 
 	$('.dropTarget').on('dragenter', function(event) { event.preventDefault() })

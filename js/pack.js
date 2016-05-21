@@ -114,7 +114,7 @@ var pack = (function() {
     return totalS
   }
 
-  function generatePagePDF(blocks) {
+  function generatePagePDF(blocks, dataurl) {
     var width  = getCookiecutterWidth()
     var height = getCookiecutterHeight()
 
@@ -140,7 +140,12 @@ var pack = (function() {
     }
 
     drawDocs(blocks)
-    doc.save()
+
+    if (dataurl) {
+      return doc.output('datauristring')
+    } else {
+      doc.save()
+    }
   }
 
   function packAttemptPage(blocks, pagesBlocks) {
@@ -175,7 +180,7 @@ var pack = (function() {
     })
 
     var results = []
-    for (var i=0; i<1000; i++) {
+    for (var i=0; i<10000; i++) {
       results.push(packAttempt(blocks, true))
     }
     results.sort(function(result1, result2) { return result1.score - result2.score })
@@ -185,17 +190,13 @@ var pack = (function() {
     console.log('best  result: ' + bestResult.score)
     console.log('worst result: ' + worstResult.score)
 
+    var dataurls = []
     bestResult.pages.forEach(function(blocks) {
-      generatePagePDF(blocks)
+      dataurls.push(generatePagePDF(blocks, true))
     })
+
+    return dataurls
   }
-
-  // var doc = new jsPDF('p', 'in', [documentWidth, documentHeight])
-  // doc.setLineWidth(1/72)
-  //
-  // layoutBlocks(topLevelBlocks, documentWidth, documentHeight, 0, 0)
-  // doc.save()
-
 })()
 
 
