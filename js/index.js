@@ -2,8 +2,8 @@
 // https://github.com/jakesgordon/bin-packing
 function bootstrapApp() {
 	if ( !getCookiecutterWidth() || !getCookiecutterHeight() ) {
-		setCookiecutterWidth(150)
-		setCookiecutterHeight(100)
+		setCookiecutterWidth(30)
+		setCookiecutterHeight(40)
 	}
 
 	if ( !getCookiecutterMargin() ) {
@@ -33,18 +33,25 @@ function bootstrapApp() {
 	$('.dropTarget').on('drop dragdrop', function(event) {
 		event.preventDefault()
 
+		showBusyView('Parsing Excel File...')
+
 		var file = event.originalEvent.dataTransfer.files
 			&& event.originalEvent.dataTransfer.files.length > 0
 			&& event.originalEvent.dataTransfer.files[0]
 
-		file && parseFile(file, function(values) {
-			var dataurls = values && pack(values)
 
-			$('.container').empty()
-			dataurls && dataurls.forEach(function(dataurl) {
-				$('.container').append("<iframe class='preview-pane' type='application/pdf' style='width: 200%; height: 200%;' frameborder='0' src=" + dataurl + "></iframe>")
-			})
-		 })
+		setTimeout(function() {
+			file && parseFile(file, function(values) {
+				showBusyView('Computing optimal frame layout...')
+
+				setTimeout(function() {
+					values && pack(values, function(dataurls) {
+						$('.container').empty()
+						dataurls && appendDataURLs(dataurls)
+					})
+				}, 200)
+			 })
+		}, 1000)
 	})
 
 	$('.dropTarget').on('dragenter', function(event) { event.preventDefault() })
@@ -52,6 +59,29 @@ function bootstrapApp() {
 	$('.dropTarget').on('dragleave', function() { })
 
 	$('.dropTarget').on('dragover', function(event) { event.preventDefault() })
+
+
+	$('.reset').click(function() {})
+}
+
+function appendDataURLs(dataurls) {
+	var dataurl = dataurls.shift()
+
+	if (dataurl) {
+		showBusyView('Embedding PDF content into page...!!!')
+
+		setTimeout(function() {
+			$('.container').append("<iframe class='preview-pane' type='application/pdf' style='width: 200%; height: 200%;' frameborder='0' src=" + dataurl + "></iframe>")
+			appendDataURLs(dataurls)
+		}, 200)
+	}	else {
+		showBusyView(void 0)
+	}
+}
+
+function showBusyView(message) {
+	$('.loadmask').css('display', (message ? 'block' : 'none'))
+	message && $('.loadmask > h1').html(message)
 }
 
 function getCookiecutterWidth()  { return getLocalStorageValue('cookiecutter_width')  }

@@ -12,17 +12,18 @@
 		<script type="text/javascript" src="js/parse.js"></script>
 		<script type="text/javascript" src="js/pack.js"></script>
 		<script type="text/javascript" src="js/index.js"></script>
+
 		<script type="text/javascript">$(document).ready(bootstrapApp)</script>
 
  		<link rel="stylesheet" type="text/css" href="css/styles.css">
+		<link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.css">
 	</head>
 
 	<body>
 		<div class="toolbar">
-			<!--
-			<button class="reset">Reset</button>
-			<button class="export">Export PDFs</button>
-		-->
+			<button class="reset btn btn-default">Reset</button>
+			<button class="export  btn btn-default">Export PDFs</button>
+
 			<div class="controls">
 				<input class="width-control" type="number" min="0"></input> <span class="by">x</span> <input class="height-control" type="number" min="0"></input>
 
@@ -45,6 +46,20 @@
 		</div>
 
 		<div class="container" style="width: 300px; height: 460px;" />
+
+
+
+		<div class="loadmask">
+			<h1></h1>
+			<div class="spinner">
+				<div class="rect1"></div>
+				<div class="rect2"></div>
+				<div class="rect3"></div>
+				<div class="rect4"></div>
+				<div class="rect5"></div>
+			</div>
+		</div>
+
 	</body>
 
 </html>

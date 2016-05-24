@@ -124,7 +124,7 @@ var pack = (function() {
     return totalS
   }
 
-  function generatePagePDF(blocks, dataurl) {
+  function generatePagePDF(blocks) {
     var width  = getCookiecutterWidth()
     var height = getCookiecutterHeight()
 
@@ -138,7 +138,6 @@ var pack = (function() {
       doc.setFillColor(255, 255, 255)
       doc.rect(block.innerRect.x, block.innerRect.y, block.innerRect.w, block.innerRect.h, 'F')
 
-      //Zebra
       var hintMessage = block.o.width + ' x ' + block.o.height + '  Color: ' + block.o.color
       doc.setTextColor(255, 255, 255)
       doc.text(block.outerRect.x + .3, block.outerRect.y + .3, hintMessage, 0)
@@ -156,11 +155,7 @@ var pack = (function() {
 
     drawDocs(blocks)
 
-    if (dataurl) {
-      return doc.output('datauristring')
-    } else {
-      doc.save()
-    }
+    return doc.output('datauristring')
   }
 
   function packAttemptPage(blocks, pagesBlocks) {
@@ -184,7 +179,22 @@ var pack = (function() {
     }
   }
 
-  return function pack(data) {
+  function nextPagePDF(pageBlocks, dataurls, callback) {
+    var pageBlks = pageBlocks.shift()
+
+    if (pageBlks) {
+      showBusyView('Generating PDF content...')
+
+      setTimeout(function() {
+        dataurls.push(generatePagePDF(pageBlks))
+        nextPagePDF(pageBlocks, dataurls, callback)
+      }, 200)
+    } else {
+      callback && callback(dataurls)
+    }
+  }
+
+  return function pack(data, callback) {
     var margin = getCookiecutterMargin()
 
     var blocks = data.map(function(datum) {
@@ -199,7 +209,7 @@ var pack = (function() {
     })
 
     var results = []
-    for (var i=0; i<1000; i++) {
+    for (var i=0; i<5000; i++) {
       results.push(packAttempt(blocks, true))
     }
     results.sort(function(result1, result2) { return result1.score - result2.score })
@@ -209,19 +219,9 @@ var pack = (function() {
     console.log('best  result: ' + bestResult.score)
     console.log('worst result: ' + worstResult.score)
 
-    var dataurls = []
-    bestResult.pages.forEach(function(blocks) {
-      dataurls.push(generatePagePDF(blocks, true))
+    nextPagePDF(bestResult.pages, [], function(dataurls) {
+      showBusyView(void 0)
+      callback && callback(dataurls)
     })
-
-    // var bestResult = packAttempt(blocks, false)
-    // var dataurls   = []
-    // bestResult.pages.forEach(function(blocks) {
-    //   dataurls.push(generatePagePDF(blocks, true))
-    // })
-
-    // alert(dataurls.length + ' at score: ' + bestResult.score)
-
-    return dataurls
   }
 })()
