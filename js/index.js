@@ -6,6 +6,10 @@ function bootstrapApp() {
 		setCookiecutterHeight(100)
 	}
 
+	if ( !getCookiecutterMargin() ) {
+		setCookiecutterMargin(.1)
+	}
+
 	function onSizeChange(value, isHeight) {
 		if (isHeight) {
 			setCookiecutterHeight(value)
@@ -14,11 +18,17 @@ function bootstrapApp() {
 		}
 	}
 
+	function onMarginChange(value) {
+		setCookiecutterMargin(value)
+	}
+
 	$('.height-control').val(getCookiecutterHeight())
 	$('.width-control').val(getCookiecutterWidth())
+	$('.margin-control').val(getCookiecutterMargin())
 
 	$('.height-control').change(function(e) { onSizeChange($(this).val(), true)  })
 	$('.width-control').change(function(e)  { onSizeChange($(this).val(), false) })
+	$('.margin-control').change(function(e)  { onMarginChange($(this).val()) })
 
 	$('.dropTarget').on('drop dragdrop', function(event) {
 		event.preventDefault()
@@ -44,8 +54,18 @@ function bootstrapApp() {
 	$('.dropTarget').on('dragover', function(event) { event.preventDefault() })
 }
 
-function getCookiecutterWidth()  { return +localStorage.getItem('cookiecutter_width')  }
-function getCookiecutterHeight() { return +localStorage.getItem('cookiecutter_height') }
+function getCookiecutterWidth()  { return getLocalStorageValue('cookiecutter_width')  }
+function getCookiecutterHeight() { return getLocalStorageValue('cookiecutter_height') }
+function getCookiecutterMargin() { return getLocalStorageValue('cookiecutter_margin') }
 
-function setCookiecutterWidth(value)  { localStorage.setItem('cookiecutter_width', value)  }
-function setCookiecutterHeight(value) { localStorage.setItem('cookiecutter_height', value) }
+function setCookiecutterWidth(value)  { setLocalStorageValue('cookiecutter_width', value)  }
+function setCookiecutterHeight(value) { setLocalStorageValue('cookiecutter_height', value) }
+function setCookiecutterMargin(value) { setLocalStorageValue('cookiecutter_margin', value) }
+
+function getLocalStorageValue(propName, defaultValue) {
+	return +localStorage.getItem(propName)
+}
+
+function setLocalStorageValue(propName, value) {
+	localStorage.setItem(propName, value)
+}

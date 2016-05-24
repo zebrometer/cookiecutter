@@ -1,6 +1,8 @@
 
 var pack = (function() {
   function addLayoutProperties(blocks, x, y) {
+    var margin = getCookiecutterMargin()
+
     blocks.forEach(function(block, index) {
       if (block.fit) {
         block.outerRect = {
@@ -15,6 +17,14 @@ var pack = (function() {
           w: block.w - (block.o.paddingLeft + block.o.paddingRight),
           h: block.h - (block.o.paddingTop  + block.o.paddingBottom)
         }
+
+        if (block.parent) {
+          block.outerRect.x += margin
+          block.outerRect.y += margin
+        }
+        block.outerRect.w -= margin
+        block.outerRect.h -= margin
+
 
         if (block.children) {
           var innerFrame = getInnerFrame(block)
@@ -114,7 +124,7 @@ var pack = (function() {
     return totalS
   }
 
-  function generatePagePDF(blocks, dataurl) {    
+  function generatePagePDF(blocks, dataurl) {
     var width  = getCookiecutterWidth()
     var height = getCookiecutterHeight()
 
@@ -163,6 +173,8 @@ var pack = (function() {
     var pageBlocks   = blocks.filter(function(block) { return !!block.fit })
     var noPageBlocks = blocks.filter(function(block) { return  !block.fit })
 
+    if (pageBlocks.length === 0) return
+
     addLayoutProperties(pageBlocks, 0, 0)
 
     pagesBlocks.push(pageBlocks)
@@ -173,10 +185,12 @@ var pack = (function() {
   }
 
   return function pack(data) {
+    var margin = getCookiecutterMargin()
+
     var blocks = data.map(function(datum) {
       return {
-        w: Math.max(datum.width, datum.height),
-        h: Math.min(datum.width, datum.height),
+        w: Math.max(datum.width, datum.height) + margin,
+        h: Math.min(datum.width, datum.height) + margin,
         o: datum
       }
     })
@@ -211,51 +225,3 @@ var pack = (function() {
     return dataurls
   }
 })()
-
-
-
-// function populateDocument(doc, blocks, documentWidth, documentHeight, x, y) {
-//   blocks.forEach(function(block, index) {
-//     var hintMessage = block.o.width + ' x ' + block.o.height + '  Color: ' + block.o.color
-//
-//     if (block.fit) {
-//       // Outer Frame
-//       doc.setFillColor(100, 100, 100)
-//       doc.rect(
-//         x + block.fit.x,
-//         y + block.fit.y,
-//         block.w,
-//         block.h,
-//         'F'
-//       )
-//
-//       // Inner Frame
-//       doc.setFillColor(255, 255, 255)
-//       doc.rect(
-//         x + block.fit.x + block.o.paddingLeft,
-//         y + block.fit.y + block.o.paddingTop,
-//         block.w - (block.o.paddingLeft + block.o.paddingRight),
-//         block.h - (block.o.paddingTop  + block.o.paddingBottom),
-//         'F')
-//
-      // doc.setTextColor(255, 255, 255)
-      // doc.text(x + block.fit.x + .3, y + block.fit.y + .3, hintMessage, 0)
-//
-//       if (block.children) {
-//         var innerFrame = getInnerFrame(block)
-//
-//         populateDocument(
-//           doc,
-//           block.children,
-//           innerFrame.w,
-//           innerFrame.h,
-//           block.fit.x + block.o.paddingLeft,
-//           block.fit.y + block.o.paddingTop
-//         )
-//       }
-//
-//     } else {
-//       console.log('%c' + hintMessage + ' did not fit', 'color: red; font-size: .8em')
-//     }
-//   })
-// }
