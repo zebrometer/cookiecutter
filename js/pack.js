@@ -114,7 +114,7 @@ var pack = (function() {
     return totalS
   }
 
-  function generatePagePDF(blocks, dataurl) {
+  function generatePagePDF(blocks, dataurl) {    
     var width  = getCookiecutterWidth()
     var height = getCookiecutterHeight()
 
@@ -127,6 +127,11 @@ var pack = (function() {
 
       doc.setFillColor(255, 255, 255)
       doc.rect(block.innerRect.x, block.innerRect.y, block.innerRect.w, block.innerRect.h, 'F')
+
+      //Zebra
+      var hintMessage = block.o.width + ' x ' + block.o.height + '  Color: ' + block.o.color
+      doc.setTextColor(255, 255, 255)
+      doc.text(block.outerRect.x + .3, block.outerRect.y + .3, hintMessage, 0)
     }
 
     var drawDocs = function(blocks) {
@@ -170,17 +175,17 @@ var pack = (function() {
   return function pack(data) {
     var blocks = data.map(function(datum) {
       return {
-        w: datum.width,
-        h: datum.height,
+        w: Math.max(datum.width, datum.height),
+        h: Math.min(datum.width, datum.height),
         o: datum
       }
     })
     .sort(function(o1, o2) {
-      return o2.h - o1.h
+      return - o1.w + o2.w
     })
 
     var results = []
-    for (var i=0; i<10000; i++) {
+    for (var i=0; i<1000; i++) {
       results.push(packAttempt(blocks, true))
     }
     results.sort(function(result1, result2) { return result1.score - result2.score })
@@ -195,11 +200,17 @@ var pack = (function() {
       dataurls.push(generatePagePDF(blocks, true))
     })
 
+    // var bestResult = packAttempt(blocks, false)
+    // var dataurls   = []
+    // bestResult.pages.forEach(function(blocks) {
+    //   dataurls.push(generatePagePDF(blocks, true))
+    // })
+
+    // alert(dataurls.length + ' at score: ' + bestResult.score)
+
     return dataurls
   }
 })()
-
-
 
 
 
@@ -227,8 +238,8 @@ var pack = (function() {
 //         block.h - (block.o.paddingTop  + block.o.paddingBottom),
 //         'F')
 //
-//       doc.setTextColor(255, 255, 255)
-//       doc.text(x + block.fit.x + .3, y + block.fit.y + .3, hintMessage, 0)
+      // doc.setTextColor(255, 255, 255)
+      // doc.text(x + block.fit.x + .3, y + block.fit.y + .3, hintMessage, 0)
 //
 //       if (block.children) {
 //         var innerFrame = getInnerFrame(block)
