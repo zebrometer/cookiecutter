@@ -22,13 +22,13 @@ function bootstrapApp() {
 		setCookiecutterMargin(value)
 	}
 
-	$('.height-control').val(getCookiecutterHeight())
-	$('.width-control').val(getCookiecutterWidth())
-	$('.margin-control').val(getCookiecutterMargin())
+	$('#height-control').val(getCookiecutterHeight())
+	$('#width-control').val(getCookiecutterWidth())
+	$('#margin-control').val(getCookiecutterMargin())
 
-	$('.height-control').change(function(e) { onSizeChange($(this).val(), true)  })
-	$('.width-control').change(function(e)  { onSizeChange($(this).val(), false) })
-	$('.margin-control').change(function(e)  { onMarginChange($(this).val()) })
+	$('#height-control').change(function(e) { onSizeChange($(this).val(), true)  })
+	$('#width-control').change(function(e)  { onSizeChange($(this).val(), false) })
+	$('#margin-control').change(function(e)  { onMarginChange($(this).val()) })
 
 	$('.dropTarget').on('drop dragdrop', function(event) {
 		event.preventDefault()
@@ -61,14 +61,22 @@ function bootstrapApp() {
 	$('.dropTarget').on('dragover', function(event) { event.preventDefault() })
 
 
-	$('.reset').click(function() {})
+	// $('#reset-pdf').click(function() {
+	// 	$('#export-pdf').prop("disabled", false);
+	// })
+
+	$('#export-pdf').click(function() {
+		alert('export')
+	})
+
+	$('#export-pdf').attr('disabled', 'disabled')
 }
 
 function appendDataURLs(dataurls) {
 	var dataurl = dataurls.shift()
 
 	if (dataurl) {
-		showBusyView('Embedding PDF content into page...!!!')
+		showBusyView('Embedding PDF content into page...')
 
 		setTimeout(function() {
 			$('.container').append("<iframe class='preview-pane' type='application/pdf' style='width: 200%; height: 200%;' frameborder='0' src=" + dataurl + "></iframe>")

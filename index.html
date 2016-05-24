@@ -20,34 +20,50 @@
 	</head>
 
 	<body>
-		<div class="toolbar">
-			<button class="reset btn btn-default">Reset</button>
-			<button class="export  btn btn-default">Export PDFs</button>
+			<div class="panel panel-primary">
+			  <div class="panel-heading">PDF Parameters <span>(Size in inches)</span></div>
+			  <div class="panel-body">
+					<form class="form-horizontal">
+				  	<div class="row">
+				    	<div class="col-sm-3">
+				      	<div class="form-group">
+		              <label for="width-control" class="control-label col-xs-3">Width</label>
+		              <div class="col-xs-9">
+		                  <input type="number" min="0" class="form-control" id="width-control" placeholder="Inches...">
+		              </div>
+				        </div>
+				      </div>
+				      <div class="col-sm-3">
+			          <div class="form-group">
+		              <label for="height-control" class="control-label col-xs-3">Height</label>
+		              <div class="col-xs-9">
+		                <input type="number" min="0" class="form-control" id="height-control" placeholder="Inches...">
+		              </div>
+			          </div>
+				      </div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="height-control" class="control-label col-xs-3">Spacing</label>
+									<div class="col-xs-9">
+										<input type="number" step="any" min="0" class="form-control" id="margin-control" placeholder="Inches...">
+									</div>
+								</div>
+							</div>
 
-			<div class="controls">
-				<input class="width-control" type="number" min="0"></input> <span class="by">x</span> <input class="height-control" type="number" min="0"></input>
-
-				<div style="padding: 20px;">
-					Margin: <input class="margin-control" type="number" min="0">
-				</div>
+				      <div class="col-sm-3">
+			          <button id="reset-pdf"  class="btn btn-default">Reset</button>
+			          <button id="export-pdf" class="btn btn-primary">Export PDF</button>
+				      </div>
+				    </div>
+				</form>
 			</div>
 		</div>
-
-		<!--
-		<div class="progress">
-			<div class="indicator animate">
-				<span></span>
-			</div>
-		</div>
-		-->
 
 		<div class="dropTarget">
 			<span>Drop Order Excel File Here...</span>
 		</div>
 
-		<div class="container" style="width: 300px; height: 460px;" />
-
-
+		<div class="container" style="width: 300px; height: 460px;"></div>
 
 		<div class="loadmask">
 			<h1></h1>
@@ -61,5 +77,4 @@
 		</div>
 
 	</body>
-
 </html>
