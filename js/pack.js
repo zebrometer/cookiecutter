@@ -137,8 +137,7 @@ var pack = (function() {
     var doc = new jsPDF('p', 'in', [width, height])
     doc.setLineWidth(1/72)
 
-    var drawDoc = function(block) {
-      //doc.setFillColor(100, 100, 100)
+    var drawDoc = function(block) {      
       var color = hexToRgb(getCookiecutterColor())
 
       doc.setFillColor(color.r, color.g, color.b)

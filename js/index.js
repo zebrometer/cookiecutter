@@ -4,7 +4,7 @@ function bootstrapApp() {
 	!getCookiecutterWidth()  && setCookiecutterWidth(30)
 	!getCookiecutterHeight() && setCookiecutterHeight(40)
 	!getCookiecutterMargin() && setCookiecutterMargin(.1)
-	!getCookiecutterColor()  && setCookiecutterColor('#cccccc')
+	!getCookiecutterColor()  && setCookiecutterColor('#646464')
 
 	function onSizeChange(value, isHeight) {
 		if (isHeight) {
