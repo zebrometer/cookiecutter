@@ -33,21 +33,22 @@ function bootstrapApp() {
 	$('.dropTarget').on('drop dragdrop', function(event) {
 		event.preventDefault()
 
+		$('.container').empty()
+
 		showBusyView('Parsing Excel File...')
 
 		var file = event.originalEvent.dataTransfer.files
 			&& event.originalEvent.dataTransfer.files.length > 0
 			&& event.originalEvent.dataTransfer.files[0]
 
-
 		setTimeout(function() {
 			file && parseFile(file, function(values) {
 				showBusyView('Computing optimal frame layout...')
 
 				setTimeout(function() {
-					values && pack(values, function(dataurls) {
-						$('.container').empty()
-						dataurls && appendDataURLs(dataurls)
+					values && pack(values, function(documents) {
+						window.cookieCutterDocuments = documents && documents.slice() // I'm bad - i know - but it's just a prototype...
+						documents && appendDataURLs(documents)
 					})
 				}, 200)
 			 })
@@ -65,25 +66,31 @@ function bootstrapApp() {
 	// 	$('#export-pdf').prop("disabled", false);
 	// })
 
-	$('#export-pdf').click(function() {
-		alert('export')
+	$('#export-pdf').click(function(e) {
+		e.preventDefault()
+
+		window.cookieCutterDocuments && window.cookieCutterDocuments.forEach(function(doc) {
+			doc.save()
+		})
 	})
 
 	$('#export-pdf').attr('disabled', 'disabled')
 }
 
-function appendDataURLs(dataurls) {
-	var dataurl = dataurls.shift()
+function appendDataURLs(documents) {
+	var doc = documents.shift()
 
-	if (dataurl) {
+	if (doc) {
 		showBusyView('Embedding PDF content into page...')
 
 		setTimeout(function() {
+			var dataurl = doc.output('datauristring')
 			$('.container').append("<iframe class='preview-pane' type='application/pdf' style='width: 200%; height: 200%;' frameborder='0' src=" + dataurl + "></iframe>")
-			appendDataURLs(dataurls)
+			appendDataURLs(documents)
 		}, 200)
 	}	else {
 		showBusyView(void 0)
+		$('#export-pdf').prop("disabled", false)
 	}
 }
 

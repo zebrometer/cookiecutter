@@ -155,7 +155,7 @@ var pack = (function() {
 
     drawDocs(blocks)
 
-    return doc.output('datauristring')
+    return doc
   }
 
   function packAttemptPage(blocks, pagesBlocks) {
@@ -179,18 +179,18 @@ var pack = (function() {
     }
   }
 
-  function nextPagePDF(pageBlocks, dataurls, callback) {
+  function nextPagePDF(pageBlocks, docs, callback) {
     var pageBlks = pageBlocks.shift()
 
     if (pageBlks) {
       showBusyView('Generating PDF content...')
 
       setTimeout(function() {
-        dataurls.push(generatePagePDF(pageBlks))
-        nextPagePDF(pageBlocks, dataurls, callback)
+        docs.push(generatePagePDF(pageBlks))
+        nextPagePDF(pageBlocks, docs, callback)
       }, 200)
     } else {
-      callback && callback(dataurls)
+      callback && callback(docs)
     }
   }
 
