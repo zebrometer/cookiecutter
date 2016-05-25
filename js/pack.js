@@ -21,10 +21,16 @@ var pack = (function() {
         if (block.parent) {
           block.outerRect.x += margin
           block.outerRect.y += margin
+
+          block.innerRect.x += margin
+          block.innerRect.y += margin
         }
+
         block.outerRect.w -= margin
         block.outerRect.h -= margin
 
+        block.innerRect.w -= margin
+        block.innerRect.h -= margin
 
         if (block.children) {
           var innerFrame = getInnerFrame(block)
