@@ -138,7 +138,10 @@ var pack = (function() {
     doc.setLineWidth(1/72)
 
     var drawDoc = function(block) {
-      doc.setFillColor(100, 100, 100)
+      //doc.setFillColor(100, 100, 100)
+      var color = hexToRgb(getCookiecutterColor())
+
+      doc.setFillColor(color.r, color.g, color.b)
       doc.rect(block.outerRect.x, block.outerRect.y, block.outerRect.w, block.outerRect.h, 'F')
 
       doc.setFillColor(255, 255, 255)
