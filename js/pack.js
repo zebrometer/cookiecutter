@@ -151,7 +151,37 @@ var pack = (function() {
     }
   }
 
-  return function pack(data, callback) {
+  function packHeuristicsSwapDimensions(data, callback, nAttempts) {
+    var margin = getCookiecutterMargin()
+
+    var blocks = data.map(function(datum) {
+      return {
+        w: Math.max(datum.width, datum.height) + margin,
+        h: Math.min(datum.width, datum.height) + margin,
+        o: datum
+      }
+    })
+    var results = []
+
+    for (var i=0; i<nAttempts; i++) {
+      var blocksAttemnt = blocks.slice()
+      blocksAttemnt = blocksAttemnt.map(function(block) {
+        var swap = Math.random() > .5
+        return {
+          w: swap ? block.h : block.w,
+          h: swap ? block.w : block.h,
+          o: block.o
+        }
+      }).sort(function(o1, o2) {
+          return - o1.h + o2.h
+      })
+      results.push(packAttempt(blocksAttemnt, false))
+    }
+    results.sort(function(result1, result2) { return result1.score - result2.score })
+    return results
+  }
+
+  function packHeuristicsRandomizeInput(data, callback, nAttempts) {
     var margin = getCookiecutterMargin()
 
     var blocks = data.map(function(datum) {
@@ -166,15 +196,25 @@ var pack = (function() {
     })
 
     var results = []
-    for (var i=0; i<5000; i++) {
+    for (var i=0; i<nAttempts; i++) {
       results.push(packAttempt(blocks, true))
     }
     results.sort(function(result1, result2) { return result1.score - result2.score })
+    return results
+  }
+
+  return function pack(data, callback) {
+    // 100 attempts is usually all that you need - make it 5000 to make it look
+    // like we are solving a more computationally difficult problem that it is
+    var nAttempts = 100
+    var results   = packHeuristicsSwapDimensions(data, callback, nAttempts)
+    //var results = packHeuristicsRandomizeInput(data, callback, nAttempts)
 
     var bestResult  = results.pop()
     var worstResult = results.shift()
     console.log('best  result: ' + bestResult.score)
     console.log('worst result: ' + worstResult.score)
+    console.log('N pages: ' + bestResult.pages.length)
 
     nextPagePDF(bestResult.pages, [], function(dataurls) {
       showBusyView(void 0)
