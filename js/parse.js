@@ -118,6 +118,7 @@ var parseFile = (function() {
     var reader = new FileReader()
 
     reader.onload = function(e) {
+      var file = e.target
       var data = e.target.result
       var workbook = XLSX.read(data, {type: 'binary'})
 

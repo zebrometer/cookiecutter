@@ -1,10 +1,11 @@
 
 var nextPagePDF = (function() {
-  function generatePagePDF(blocks) {
+  function generatePagePDF(blocks, index) {
     var width  = getCookiecutterWidth()
     var height = getCookiecutterHeight()
 
     var doc = new jsPDF('p', 'in', [width, height])
+    doc.filename = getCookiecutterPrefix() + '-Page-' + (index+1) + '.pdf'
     doc.setLineWidth(1/72)
 
     var drawDoc = function(block) {
@@ -43,7 +44,7 @@ var nextPagePDF = (function() {
       showBusyView('Generating PDF content...')
 
       setTimeout(function() {
-        docs.push(generatePagePDF(pageBlks))
+        docs.push(generatePagePDF(pageBlks, docs.length))
         nextPagePDF(pageBlocks, docs, callback)
       }, 200)
     } else {

@@ -5,6 +5,7 @@ function bootstrapApp() {
 	!getCookiecutterHeight() && setCookiecutterHeight(40)
 	!getCookiecutterMargin() && setCookiecutterMargin(.1)
 	!getCookiecutterColor()  && setCookiecutterColor('#646464')
+	!getCookiecutterPrefix() && setCookiecutterPrefix('Job')
 
 	function onSizeChange(value, isHeight) {
 		if (isHeight) {
@@ -22,15 +23,21 @@ function bootstrapApp() {
 		setCookiecutterColor(value)
 	}
 
+	function onPrefixChange(value) {
+		setCookiecutterPrefix(value)
+	}
+
 	$('#height-control').val(getCookiecutterHeight())
 	$('#width-control').val(getCookiecutterWidth())
 	$('#margin-control').val(getCookiecutterMargin())
 	$('#color-control').val(getCookiecutterColor())
+	$('#prefix-control').val(getCookiecutterPrefix())
 
 	$('#height-control').change(function(e) { onSizeChange($(this).val(), true)  })
 	$('#width-control').change(function(e)  { onSizeChange($(this).val(), false) })
 	$('#margin-control').change(function(e) { onMarginChange($(this).val())      })
 	$('#color-control').change(function(e)  { onColorChange($(this).val())       })
+	$('#prefix-control').change(function(e) { onPrefixChange($(this).val())       })
 
 	$('.dropTarget').on('drop dragdrop', function(event) {
 		event.preventDefault()
@@ -63,20 +70,19 @@ function bootstrapApp() {
 
 	$('.dropTarget').on('dragover', function(event) { event.preventDefault() })
 
-
-	// $('#reset-pdf').click(function() {
-	// 	$('#export-pdf').prop("disabled", false);
-	// })
-
 	$('#export-pdf').click(function(e) {
 		e.preventDefault()
 
 		window.cookieCutterDocuments && window.cookieCutterDocuments.forEach(function(doc) {
-			doc.save()
+			doc.save(doc.filename)
 		})
 	})
 
 	$('#export-pdf').attr('disabled', 'disabled')
+
+	$('#reset-pdf').click(function() {
+		clearLocalStorageValues()
+	})
 }
 
 function appendDataURLs(documents) {
@@ -104,12 +110,14 @@ function showBusyView(message) {
 function getCookiecutterWidth()  { return getLocalStorageValue('cookiecutter_width')  }
 function getCookiecutterHeight() { return getLocalStorageValue('cookiecutter_height') }
 function getCookiecutterMargin() { return getLocalStorageValue('cookiecutter_margin') }
-function getCookiecutterColor()  { return getLocalStorageValue('cookiecutter_color', true) }
+function getCookiecutterColor()  { return getLocalStorageValue('cookiecutter_color',  true) }
+function getCookiecutterPrefix() { return getLocalStorageValue('cookiecutter_prefix', true) }
 
 function setCookiecutterWidth(value)  { setLocalStorageValue('cookiecutter_width',  value) }
 function setCookiecutterHeight(value) { setLocalStorageValue('cookiecutter_height', value) }
 function setCookiecutterMargin(value) { setLocalStorageValue('cookiecutter_margin', value) }
 function setCookiecutterColor(value)  { setLocalStorageValue('cookiecutter_color',  value) }
+function setCookiecutterPrefix(value) {	setLocalStorageValue('cookiecutter_prefix', value) }
 
 function getLocalStorageValue(propName, isString) {
 	return isString
@@ -121,6 +129,9 @@ function setLocalStorageValue(propName, value) {
 	localStorage.setItem(propName, value)
 }
 
+function clearLocalStorageValues() {
+	localStorage.clear()
+}
 
 function hexToRgb(hex) {
     // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")

@@ -206,7 +206,7 @@ var pack = (function() {
   return function pack(data, callback) {
     // 100 attempts is usually all that you need - make it 5000 to make it look
     // like we are solving a more computationally difficult problem that it is
-    var nAttempts = 100
+    var nAttempts = 5000
     var results   = packHeuristicsSwapDimensions(data, callback, nAttempts)
     //var results = packHeuristicsRandomizeInput(data, callback, nAttempts)
 
