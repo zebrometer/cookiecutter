@@ -12,33 +12,48 @@ var pack = (function() {
           h: block.h
         }
         block.innerRect = {
-          x: x + block.fit.x + block.o.paddingLeft,
-          y: y + block.fit.y + block.o.paddingTop,
-          w: block.w - (block.o.paddingLeft + block.o.paddingRight),
-          h: block.h - (block.o.paddingTop  + block.o.paddingBottom)
+          x: x + block.fit.x + block.o.paddingLeft + margin,
+          y: y + block.fit.y + block.o.paddingTop + margin,
+          w: block.w - (block.o.paddingLeft + block.o.paddingRight  + 2*margin),
+          h: block.h - (block.o.paddingTop  + block.o.paddingBottom + 2*margin)
         }
 
-        if (block.parent) {
-          block.outerRect.x += margin
-          block.outerRect.y += margin
+        // block.outerRect.x += margin
+        // block.outerRect.y += margin
+        // block.outerRect.w -= margin
+        // block.outerRect.h -= margin
 
-          block.innerRect.x += margin
-          block.innerRect.y += margin
-        }
+        // if (block.parent) {
+        //   block.outerRect.x += margin
+        //   block.outerRect.y += margin
+        //   block.outerRect.w -= 2*margin
+        //   block.outerRect.h -= 2*margin
+        // } else {
+        //
+        // }
 
-        block.outerRect.w -= margin
-        block.outerRect.h -= margin
 
-        block.innerRect.w -= margin
-        block.innerRect.h -= margin
+        // if (block.parent) {
+        //   block.outerRect.x += margin
+        //   block.outerRect.y += margin
+        //
+        //   block.innerRect.x += margin
+        //   block.innerRect.y += margin
+        // }
+        //
+        // block.outerRect.w -= 2*margin
+        // block.outerRect.h -= 2*margin
+        //
+        // block.innerRect.w -= 2*margin
+        // block.innerRect.h -= 2*margin
 
         if (block.children) {
           var innerFrame = getInnerFrame(block)
 
           addLayoutProperties(
             block.children,
-            block.fit.x + block.o.paddingLeft,
-            block.fit.y + block.o.paddingTop
+            block.fit.x + block.o.paddingLeft + margin,
+            block.fit.y + block.o.paddingTop  + margin
           )
         }
       }
@@ -72,9 +87,11 @@ var pack = (function() {
   }
 
   function getInnerFrame(block) {
+    var margin = getCookiecutterMargin()
+
     return {
-      w: block.w - block.o.paddingLeft - block.o.paddingRight,
-      h: block.h - block.o.paddingTop  - block.o.paddingBottom
+      w: block.w - block.o.paddingLeft - block.o.paddingRight  - 2*margin,
+      h: block.h - block.o.paddingTop  - block.o.paddingBottom - 2*margin
     }
   }
 
@@ -156,8 +173,8 @@ var pack = (function() {
 
     var blocks = data.map(function(datum) {
       return {
-        w: Math.max(datum.width, datum.height) + margin,
-        h: Math.min(datum.width, datum.height) + margin,
+        w: Math.max(datum.width, datum.height) + 2*margin,
+        h: Math.min(datum.width, datum.height) + 2*margin,
         o: datum
       }
     })
@@ -181,32 +198,32 @@ var pack = (function() {
     return results
   }
 
-  function packHeuristicsRandomizeInput(data, callback, nAttempts) {
-    var margin = getCookiecutterMargin()
-
-    var blocks = data.map(function(datum) {
-      return {
-        w: Math.max(datum.width, datum.height) + margin,
-        h: Math.min(datum.width, datum.height) + margin,
-        o: datum
-      }
-    })
-    .sort(function(o1, o2) {
-      return - o1.w + o2.w
-    })
-
-    var results = []
-    for (var i=0; i<nAttempts; i++) {
-      results.push(packAttempt(blocks, true))
-    }
-    results.sort(function(result1, result2) { return result1.score - result2.score })
-    return results
-  }
+  // function packHeuristicsRandomizeInput(data, callback, nAttempts) {
+  //   var margin = getCookiecutterMargin()
+  //
+  //   var blocks = data.map(function(datum) {
+  //     return {
+  //       w: Math.max(datum.width, datum.height) + margin,
+  //       h: Math.min(datum.width, datum.height) + margin,
+  //       o: datum
+  //     }
+  //   })
+  //   .sort(function(o1, o2) {
+  //     return - o1.w + o2.w
+  //   })
+  //
+  //   var results = []
+  //   for (var i=0; i<nAttempts; i++) {
+  //     results.push(packAttempt(blocks, true))
+  //   }
+  //   results.sort(function(result1, result2) { return result1.score - result2.score })
+  //   return results
+  // }
 
   return function pack(data, callback) {
     // 100 attempts is usually all that you need - make it 5000 to make it look
     // like we are solving a more computationally difficult problem that it is
-    var nAttempts = 5000
+    var nAttempts = 100//5000
     var results   = packHeuristicsSwapDimensions(data, callback, nAttempts)
     //var results = packHeuristicsRandomizeInput(data, callback, nAttempts)
 

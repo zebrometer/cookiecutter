@@ -3,7 +3,7 @@
 function bootstrapApp() {
 	!getCookiecutterWidth()  && setCookiecutterWidth(30)
 	!getCookiecutterHeight() && setCookiecutterHeight(40)
-	!getCookiecutterMargin() && setCookiecutterMargin(.1)
+	!getCookiecutterMargin() && setCookiecutterMargin(.125)
 	!getCookiecutterColor()  && setCookiecutterColor('#646464')
 	!getCookiecutterPrefix() && setCookiecutterPrefix('Job')
 
