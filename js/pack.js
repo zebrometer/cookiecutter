@@ -18,35 +18,6 @@ var pack = (function() {
           h: block.h - (block.o.paddingTop  + block.o.paddingBottom + 2*margin)
         }
 
-        // block.outerRect.x += margin
-        // block.outerRect.y += margin
-        // block.outerRect.w -= margin
-        // block.outerRect.h -= margin
-
-        // if (block.parent) {
-        //   block.outerRect.x += margin
-        //   block.outerRect.y += margin
-        //   block.outerRect.w -= 2*margin
-        //   block.outerRect.h -= 2*margin
-        // } else {
-        //
-        // }
-
-
-        // if (block.parent) {
-        //   block.outerRect.x += margin
-        //   block.outerRect.y += margin
-        //
-        //   block.innerRect.x += margin
-        //   block.innerRect.y += margin
-        // }
-        //
-        // block.outerRect.w -= 2*margin
-        // block.outerRect.h -= 2*margin
-        //
-        // block.innerRect.w -= 2*margin
-        // block.innerRect.h -= 2*margin
-
         if (block.children) {
           var innerFrame = getInnerFrame(block)
 
@@ -223,7 +194,7 @@ var pack = (function() {
   return function pack(data, callback) {
     // 100 attempts is usually all that you need - make it 5000 to make it look
     // like we are solving a more computationally difficult problem that it is
-    var nAttempts = 100//5000
+    var nAttempts = 3000
     var results   = packHeuristicsSwapDimensions(data, callback, nAttempts)
     //var results = packHeuristicsRandomizeInput(data, callback, nAttempts)
 
