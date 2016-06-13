@@ -12,7 +12,12 @@
   "devDependencies": {
     "bootstrap": "^3.3.6",
     "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-strip-comments": "^2.4.3",
+    "gulp-uglify": "^1.5.3",
     "jquery": "^2.2.3",
+    "run-sequence": "^1.2.1",
     "xlsx": "^0.8.0"
   },
   "scripts": {
