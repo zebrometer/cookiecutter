@@ -19,12 +19,14 @@ var pack = (function() {
         }
 
         if (block.children) {
-          var innerFrame = getInnerFrame(block)
+          // var innerFrame = getInnerFrame(block)
 
           addLayoutProperties(
             block.children,
-            block.fit.x + block.o.paddingLeft + margin,
-            block.fit.y + block.o.paddingTop  + margin
+            // block.fit.x + block.o.paddingLeft + margin,
+            // block.fit.y + block.o.paddingTop  + margin
+            block.innerRect.x + margin,
+            block.innerRect.y + margin
           )
         }
       }
@@ -194,14 +196,14 @@ var pack = (function() {
   return function pack(data, callback) {
     // 100 attempts is usually all that you need - make it 5000 to make it look
     // like we are solving a more computationally difficult problem that it is
-    var nAttempts = 3000
+    var nAttempts = 1000    
     var results   = packHeuristicsSwapDimensions(data, callback, nAttempts)
     //var results = packHeuristicsRandomizeInput(data, callback, nAttempts)
 
     var bestResult  = results.pop()
     var worstResult = results.shift()
-    console.log('best  result: ' + bestResult.score)
-    console.log('worst result: ' + worstResult.score)
+    bestResult  && console.log('best  result: ' + bestResult.score)
+    worstResult && console.log('worst result: ' + worstResult.score)
     console.log('N pages: ' + bestResult.pages.length)
 
     nextPagePDF(bestResult.pages, [], function(dataurls) {
