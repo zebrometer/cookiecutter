@@ -107,8 +107,15 @@ function showBusyView(message) {
 	message && $('.loadmask > h1').html(message)
 }
 
-function getCookiecutterWidth()  { return getLocalStorageValue('cookiecutter_width')  }
-function getCookiecutterHeight() { return getLocalStorageValue('cookiecutter_height') }
+function getCookiecutterWidth()  {
+	return Math.min(getLocalStorageValue('cookiecutter_width'), getLocalStorageValue('cookiecutter_height'))
+}
+function getCookiecutterHeight() {
+	return Math.max(getLocalStorageValue('cookiecutter_width'), getLocalStorageValue('cookiecutter_height'))
+}
+
+// function getCookiecutterWidth()  { return getLocalStorageValue('cookiecutter_width')  }
+// function getCookiecutterHeight() { return getLocalStorageValue('cookiecutter_height') }
 function getCookiecutterMargin() { return getLocalStorageValue('cookiecutter_margin') }
 function getCookiecutterColor()  { return getLocalStorageValue('cookiecutter_color',  true) }
 function getCookiecutterPrefix() { return getLocalStorageValue('cookiecutter_prefix', true) }
