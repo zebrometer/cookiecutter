@@ -1,8 +1,8 @@
 // https://github.com/SheetJS/js-xlsx
 // https://github.com/jakesgordon/bin-packing
 function bootstrapApp() {
-	!getCookiecutterWidth()  && setCookiecutterWidth(30)
-	!getCookiecutterHeight() && setCookiecutterHeight(40)
+	!getLocalStorageValue('cookiecutter_width')  && setCookiecutterWidth(30)
+	!getLocalStorageValue('cookiecutter_height') && setCookiecutterHeight(40)
 	!getCookiecutterMargin() && setCookiecutterMargin(.125)
 	!getCookiecutterColor()  && setCookiecutterColor('#646464')
 	!getCookiecutterPrefix() && setCookiecutterPrefix('Job')
